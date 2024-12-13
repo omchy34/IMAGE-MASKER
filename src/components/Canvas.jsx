@@ -6,6 +6,7 @@ function Canvas({ image }) {
   const [brushSize, setBrushSize] = useState(10);
   const [imageScale, setImageScale] = useState(5); 
   const maskRef = useRef(null); 
+  const [showSidebar, setShowSidebar] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -52,8 +53,10 @@ function Canvas({ image }) {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+
+    const x = e.touches ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
+    const y = e.touches ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'white';
@@ -119,8 +122,8 @@ function Canvas({ image }) {
 
   return (
     <div className="flex h-screen bg-darkBlue">
- 
-      <div className="flex flex-col w-64 p-6 bg-gray-900 text-white shadow-lg">
+      {/* Sidebar */}
+      <div className={`fixed md:relative transition-transform duration-300 ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 w-64 p-6 bg-gray-900 text-white shadow-lg z-10`}>
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-primary">Image Masker</h1>
           <p className="text-sm text-gray-400">Edit and scale your images</p>
@@ -163,6 +166,15 @@ function Canvas({ image }) {
         </div>
       </div>
 
+     
+      <button 
+        className="fixed top-4 left-4 md:hidden bg-gray-800 text-white p-2 rounded shadow z-20" 
+        onClick={() => setShowSidebar(!showSidebar)}
+      >
+        {showSidebar ? '✖' : '☰'}
+      </button>
+
+   
       <div className="flex-1 flex items-center justify-center">
         <canvas
           ref={canvasRef}
@@ -171,6 +183,9 @@ function Canvas({ image }) {
           onMouseUp={stopDrawing}
           onMouseMove={draw}
           onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchEnd={stopDrawing}
+          onTouchMove={draw}
         />
       </div>
     </div>
