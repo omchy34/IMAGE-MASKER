@@ -9,7 +9,7 @@ function App() {
 
   const handleImageSelect = (imageUrl) => {
     setImage(imageUrl);
-    // Redirect to /canvas and pass the image URL via state
+    
     navigate('/canvas', { state: { image: imageUrl } });
   };
 
@@ -32,7 +32,7 @@ function App() {
 
 function CanvasPage() {
   const location = useLocation();
-  const image = location.state?.image; // Retrieve the image passed through state
+  const image = location.state?.image; 
 
   return image ? <Canvas image={image} /> : <div>No image uploaded</div>;
 }

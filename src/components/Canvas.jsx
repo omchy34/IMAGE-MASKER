@@ -4,8 +4,8 @@ function Canvas({ image }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [brushSize, setBrushSize] = useState(10);
-  const [imageScale, setImageScale] = useState(5); // Default to 50%
-  const maskRef = useRef(null); // To store the mask
+  const [imageScale, setImageScale] = useState(5); 
+  const maskRef = useRef(null); 
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -19,11 +19,8 @@ function Canvas({ image }) {
 
       canvas.width = width;
       canvas.height = height;
-
-      // Draw the image
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Restore the mask
       if (maskRef.current) {
         const mask = new Image();
         mask.src = maskRef.current;
@@ -46,7 +43,6 @@ function Canvas({ image }) {
     const ctx = canvas.getContext('2d');
     ctx.beginPath();
 
-    // Save the mask
     maskRef.current = canvas.toDataURL();
   };
 
@@ -58,13 +54,11 @@ function Canvas({ image }) {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'white';
     ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
-
     ctx.lineTo(x, y);
     ctx.stroke();
     ctx.beginPath();
@@ -75,17 +69,14 @@ function Canvas({ image }) {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     const img = new Image();
     img.src = image;
     img.onload = () => {
       const width = (img.width * imageScale) / 100;
       const height = (img.height * imageScale) / 100;
-
       ctx.drawImage(img, 0, 0, width, height);
     };
 
-    // Clear the mask
     maskRef.current = null;
   };
 
@@ -97,33 +88,23 @@ function Canvas({ image }) {
 
     const maskImage = new Image();
     maskImage.src = maskRef.current;
-
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-
     const originalImage = new Image();
     originalImage.src = image;
-
     originalImage.onload = () => {
+
       const exportCanvas = document.createElement('canvas');
       exportCanvas.width = canvas.width;
       exportCanvas.height = canvas.height;
+
       const exportCtx = exportCanvas.getContext('2d');
-
-      // Draw the original image
       exportCtx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-
-      // Export the original image
       const originalDataURL = exportCanvas.toDataURL('image/png');
-
-      // Clear and draw the mask for the mask image
       exportCtx.clearRect(0, 0, exportCanvas.width, exportCanvas.height);
       exportCtx.drawImage(maskImage, 0, 0, canvas.width, canvas.height);
-
-      // Export the mask image
       const maskDataURL = exportCanvas.toDataURL('image/png');
 
-      // Download both images
       downloadImage(originalDataURL, 'original-image.png');
       downloadImage(maskDataURL, 'mask-image.png');
     };
@@ -138,7 +119,7 @@ function Canvas({ image }) {
 
   return (
     <div className="flex h-screen bg-darkBlue">
-      {/* Left Sidebar */}
+ 
       <div className="flex flex-col w-64 p-6 bg-gray-900 text-white shadow-lg">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-primary">Image Masker</h1>
@@ -182,7 +163,6 @@ function Canvas({ image }) {
         </div>
       </div>
 
-      {/* Canvas */}
       <div className="flex-1 flex items-center justify-center">
         <canvas
           ref={canvasRef}
