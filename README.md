@@ -9,7 +9,7 @@ A web application to edit images by drawing masks. Users can scale the image, ad
 - Export the original image and the mask image as separate files.
 
 ## Live Preview Link
-- <a href="https://image-masker.onrender.com">Live preview </a>
+- <a target='_blanck' href="https://image-masker.onrender.com">Live preview </a>
 
 ## Libraries Used
 - **React**: For building the user interface.
